@@ -1,7 +1,9 @@
 package ApiRest.TurnosRotativos.dto;
 
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
@@ -12,19 +14,22 @@ public class EmpleadoDTO {
     private int id;
     private int nroDocumento;
 
-    @NotBlank(message = "nombre es requerido")
+    @NotBlank(message = "nombre es obligatorio.")
+    @Pattern(regexp = "^[a-zA-Z]+$", message = "Solo se permiten letras en el campo 'nombre'")
     private String nombre;
 
-    @NotBlank(message = "apellido es requerido")
+    @NotBlank(message = "apellido es obligatorio.")
+    @Pattern(regexp = "^[a-zA-Z]+$", message = "Solo se permiten letras en el campo 'apellido'")
     private String apellido;
 
-    @NotBlank(message = "email es requerido")
+    @NotBlank(message = "email es obligatorio.")
+    @Email(message = "El email ingresado no es correcto.")
     private String email;
 
-    @NotNull(message = "fecha de vencimiento es requerida")
+    @NotNull(message = "fecha de nacimiento es obligatorio.")
     private LocalDate fechaNacimiento;
 
-    @NotNull(message = "fecha de ingreso es requerida")
+    @NotNull(message = "fecha de ingreso es obligatorio.")
     private LocalDate fechaIngreso;
 
 
