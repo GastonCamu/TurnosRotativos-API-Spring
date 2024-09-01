@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface EmpleadoService {
 //    public EmpleadoDTO getEmpleado(Long id);
-//    public List<EmpleadoDTO> getEmpleados();
+    public List<EmpleadoDTO> getEmpleados();
     public EmpleadoDTO createEmpleado(EmpleadoDTO empleadoDTO);
 //    public void deleteEmpleado(Long id);
 }

@@ -11,6 +11,8 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDate;
+import java.util.Collections;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -38,6 +40,16 @@ public class EmpleadoServiceImplTest {
         empleadoDTO.setEmail("gastonjouse@gmail.com");
         empleadoDTO.setFechaNacimiento(LocalDate.of(2002, 9, 1));
         empleadoDTO.setFechaIngreso(LocalDate.of(2023, 9, 1));
+    }
+
+    // Test para verificar que se retorna una lista vacía cuando no hay empleados
+    @Test
+    void getEmpleados_deberiaRetornarListaVacia_cuandoNoHayEmpleados() {
+        when(empleadoRepositoryMock.findAll()).thenReturn(Collections.emptyList());
+
+        List<EmpleadoDTO> resultado = empleadoServiceImplUnderTest.getEmpleados();
+
+        assertEquals(0, resultado.size(), "La lista debería estar vacía");
     }
 
     // Test para probar si existe otro empleado con el mismo correo electronico
