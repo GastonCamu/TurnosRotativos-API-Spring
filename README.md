@@ -18,18 +18,30 @@ Spring Initializr: https://start.spring.io/#!type=maven-project&language=java&pl
 # Estructura de directorios
 
 ## /controller
+### EmpleadoController
 
 ## /dto
+### EmpleadoDTO
 
 ## /entity
-
 ### Empleado
 El manejo de la creacion de la fechaCreacion se hizo con PrePersist ya que se toma la fecha del momento exacto en el que se guarda el empleado en la base de datos.
 
 ## /exception
+En este proyecto decidi trabajar de manera que atraves de el servicio puedo retornar un mensaje y un HttpStatus. Ademas de manejar las validaciones en el DTO.
+### BusinessException
+### GlobalExceptionHandler
 
 ## /mapper
+Este directorio es donde se encuentran las clases que sirven para convertir la entidad en dto y viceversa. 
+### EmpleadoMapper
 
 ## /repository
+### EmpleadoRepository
 
 ## /service
+Las validaciones que se solicitaron, actualmente se estan trabajando directamente en los servicios.
+### EmpleadoService
+Interfaz de EmpleadoService
+### impl
+#### EmpleadoServiceImpl
