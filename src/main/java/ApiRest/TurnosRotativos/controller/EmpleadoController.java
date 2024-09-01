@@ -22,7 +22,7 @@ public class EmpleadoController {
 
     @PostMapping
     public ResponseEntity<EmpleadoDTO> createEmpleado(@Valid @RequestBody EmpleadoDTO empleadoDTO) {
-        EmpleadoDTO empleado = this.empleadoService.CreateEmpleado(empleadoDTO);
+        EmpleadoDTO empleado = this.empleadoService.createEmpleado(empleadoDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(empleado);
     }
 }
