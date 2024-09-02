@@ -3,6 +3,7 @@ package ApiRest.TurnosRotativos.entity;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name="empleados")
@@ -32,11 +33,11 @@ public class Empleado {
     private LocalDate fechaIngreso;
 
     @Column(name = "fecha_creacion", nullable = false, updatable = false)
-    private LocalDate fechaCreacion;
+    private LocalDateTime fechaCreacion;
 
     @PrePersist
     protected void onCreate() {
-        this.fechaCreacion = LocalDate.now();
+        this.fechaCreacion = LocalDateTime.now();
     }
 
     public int getId() {
@@ -95,7 +96,7 @@ public class Empleado {
         this.fechaIngreso = fechaIngreso;
     }
 
-    public LocalDate getFechaCreacion() {
+    public LocalDateTime getFechaCreacion() {
         return fechaCreacion;
     }
 

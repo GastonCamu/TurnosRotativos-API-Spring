@@ -18,7 +18,9 @@ public class EmpleadoMapper {
         dto.setEmail(empleado.getEmail());
         dto.setFechaNacimiento(empleado.getFechaNacimiento());
         dto.setFechaIngreso(empleado.getFechaIngreso());
-        dto.setFechaCreacion(empleado.getFechaCreacion());
+        if (empleado.getFechaCreacion() != null) {
+            dto.setFechaCreacion(empleado.getFechaCreacion().toLocalDate());
+        }
 
         return dto;
     }
