@@ -9,5 +9,6 @@ public interface EmpleadoService {
     public EmpleadoDTO getEmpleado(int id);
     public List<EmpleadoDTO> getEmpleados();
     public EmpleadoDTO createEmpleado(EmpleadoDTO empleadoDTO);
+    public EmpleadoDTO updateEmpleado(int id, EmpleadoDTO empleadoDTO);
 //    public void deleteEmpleado(Long id);
 }

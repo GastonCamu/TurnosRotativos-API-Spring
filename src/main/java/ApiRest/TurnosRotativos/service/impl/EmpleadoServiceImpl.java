@@ -53,5 +53,27 @@ public class EmpleadoServiceImpl implements EmpleadoService {
         return EmpleadoMapper.toDTO(empleado);
     }
 
+    @Override
+    public EmpleadoDTO updateEmpleado(int id, EmpleadoDTO empleadoDTO) {
+        Empleado existingEmpleado = repository.findById(id)
+                .orElseThrow(() -> new BusinessException("No se encontró el empleado con Id: " + id, HttpStatus.NOT_FOUND));
+
+        EmpleadoValidator.validateUniqueFieldsForUpdate(empleadoDTO, existingEmpleado, repository);
+        EmpleadoValidator.validateFechas(empleadoDTO);
+        EmpleadoValidator.validateEdad(empleadoDTO);
+
+
+        existingEmpleado.setNombre(empleadoDTO.getNombre());
+        existingEmpleado.setApellido(empleadoDTO.getApellido());
+        existingEmpleado.setEmail(empleadoDTO.getEmail());
+        existingEmpleado.setNroDocumento(empleadoDTO.getNroDocumento());
+        existingEmpleado.setFechaNacimiento(empleadoDTO.getFechaNacimiento());
+        existingEmpleado.setFechaIngreso(empleadoDTO.getFechaIngreso());
+
+        Empleado updatedEmpleado = repository.save(existingEmpleado);
+
+        return  EmpleadoMapper.toDTO(updatedEmpleado);
+    }
+
 
 }

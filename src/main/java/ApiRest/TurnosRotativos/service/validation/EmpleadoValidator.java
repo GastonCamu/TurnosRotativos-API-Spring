@@ -1,13 +1,15 @@
 package ApiRest.TurnosRotativos.service.validation;
 
 import ApiRest.TurnosRotativos.dto.EmpleadoDTO;
+import ApiRest.TurnosRotativos.entity.Empleado;
 import ApiRest.TurnosRotativos.exception.BusinessException;
 import ApiRest.TurnosRotativos.repository.EmpleadoRepository;
 import org.springframework.http.HttpStatus;
-import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
 import java.time.Period;
+
+import java.util.Optional;
 
 public class EmpleadoValidator {
 
@@ -36,4 +38,20 @@ public class EmpleadoValidator {
         }
     }
 
+    public static void validateUniqueFieldsForUpdate(EmpleadoDTO empleadoDTO, Empleado existingEmpleado, EmpleadoRepository repository) {
+
+        if (existingEmpleado.getNroDocumento() != empleadoDTO.getNroDocumento()) {
+            Optional<Empleado> empleadoByDoc = repository.findByNroDocumento(empleadoDTO.getNroDocumento());
+            if (empleadoByDoc.isPresent() && empleadoByDoc.get().getId() != existingEmpleado.getId()) {
+                throw new BusinessException("Ya existe un empleado con el documento ingresado.", HttpStatus.CONFLICT);
+            }
+        }
+
+        if (!existingEmpleado.getEmail().equals(empleadoDTO.getEmail())) {
+            Optional<Empleado> empleadoByEmail = repository.findByEmail(empleadoDTO.getEmail());
+            if (empleadoByEmail.isPresent() && empleadoByEmail.get().getId() != existingEmpleado.getId()) {
+                throw new BusinessException("Ya existe un empleado con el email ingresado.", HttpStatus.CONFLICT);
+            }
+        }
+    }
 }
