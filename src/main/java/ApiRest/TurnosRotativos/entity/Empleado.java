@@ -43,6 +43,10 @@ public class Empleado {
         return id;
     }
 
+    public void setId(int id) {
+        this.id = id;
+    }
+
     public int getNroDocumento() {
         return nroDocumento;
     }

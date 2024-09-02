@@ -1,8 +1,8 @@
 package ApiRest.TurnosRotativos.service.impl;
 
 import ApiRest.TurnosRotativos.dto.EmpleadoDTO;
+import ApiRest.TurnosRotativos.entity.Empleado;
 import ApiRest.TurnosRotativos.exception.BusinessException;
-import ApiRest.TurnosRotativos.mapper.EmpleadoMapper;
 import ApiRest.TurnosRotativos.repository.EmpleadoRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -25,6 +25,7 @@ import static org.mockito.Mockito.when;
 public class EmpleadoServiceImplTest {
 
     private EmpleadoDTO empleadoDTO;
+    private Empleado existingEmpleado;
 
     @Mock
     private EmpleadoRepository empleadoRepositoryMock;
@@ -42,6 +43,15 @@ public class EmpleadoServiceImplTest {
         empleadoDTO.setEmail("gastonjouse@gmail.com");
         empleadoDTO.setFechaNacimiento(LocalDate.of(2002, 9, 1));
         empleadoDTO.setFechaIngreso(LocalDate.of(2023, 9, 1));
+
+        existingEmpleado = new Empleado();
+        existingEmpleado.setId(1);
+        existingEmpleado.setNombre("Gaston");
+        existingEmpleado.setApellido("Perez");
+        existingEmpleado.setNroDocumento(32444321);
+        existingEmpleado.setEmail("gastonjouse@gmail.com");
+        existingEmpleado.setFechaNacimiento(LocalDate.of(2002, 9, 1));
+        existingEmpleado.setFechaIngreso(LocalDate.of(2023, 9, 1));
     }
 
     // Test para verificar que lanza una excepción si el empleado no existe
@@ -49,7 +59,8 @@ public class EmpleadoServiceImplTest {
     void getEmpleado_deberiaLanzarExcepcion_cuandoEmpleadoNoExiste() {
         when(empleadoRepositoryMock.findById(anyInt())).thenReturn(Optional.empty());
 
-        BusinessException exception = assertThrows(BusinessException.class, () -> empleadoServiceImplUnderTest.getEmpleado(1));
+        BusinessException exception = assertThrows(BusinessException.class,
+                () -> empleadoServiceImplUnderTest.getEmpleado(1));
 
         assertEquals("No se encontró el empleado con Id: 1", exception.getMessage());
     }
@@ -69,7 +80,8 @@ public class EmpleadoServiceImplTest {
     void crearEmpleado_deberiaLanzarExcepcion_cuandoElEmailYaExiste() {
         when(empleadoRepositoryMock.existsByEmail(any())).thenReturn(true);
 
-        Throwable exception = assertThrows(BusinessException.class, () -> empleadoServiceImplUnderTest.createEmpleado(empleadoDTO));
+        Throwable exception = assertThrows(BusinessException.class,
+                () -> empleadoServiceImplUnderTest.createEmpleado(empleadoDTO));
 
         assertEquals("Ya existe un empleado con el email ingresado.", exception.getMessage());
     }
@@ -79,7 +91,8 @@ public class EmpleadoServiceImplTest {
     void crearEmpleado_deberiaLanzarExcepcion_cuandoElNroDocumentoYaExiste() {
         when(empleadoRepositoryMock.existsByNroDocumento(anyInt())).thenReturn(true);
 
-        Throwable exception = assertThrows(BusinessException.class, () -> empleadoServiceImplUnderTest.createEmpleado(empleadoDTO));
+        Throwable exception = assertThrows(BusinessException.class,
+                () -> empleadoServiceImplUnderTest.createEmpleado(empleadoDTO));
 
         assertEquals("Ya existe un empleado con el documento ingresado.", exception.getMessage());
     }
@@ -89,7 +102,8 @@ public class EmpleadoServiceImplTest {
     void crearEmpleado_deberiaLanzarExcepcion_cuandoLaFechaDeIngresoEsPosteriorALaActual() {
         empleadoDTO.setFechaIngreso(LocalDate.now().plusDays(1));
 
-        Throwable exception = assertThrows(BusinessException.class, () -> empleadoServiceImplUnderTest.createEmpleado(empleadoDTO));
+        Throwable exception = assertThrows(BusinessException.class,
+                () -> empleadoServiceImplUnderTest.createEmpleado(empleadoDTO));
 
         assertEquals("La fecha de ingreso no puede ser posterior al día de la fecha.", exception.getMessage());
     }
@@ -99,7 +113,8 @@ public class EmpleadoServiceImplTest {
     void crearEmpleado_deberiaLanzarExcepcion_cuandoLaFechaDeNacimientoEsPosteriorALaActual() {
         empleadoDTO.setFechaNacimiento(LocalDate.now().plusDays(1));
 
-        Throwable exception = assertThrows(BusinessException.class, () -> empleadoServiceImplUnderTest.createEmpleado(empleadoDTO));
+        Throwable exception = assertThrows(BusinessException.class,
+                () -> empleadoServiceImplUnderTest.createEmpleado(empleadoDTO));
 
         assertEquals("La fecha de nacimiento no puede ser posterior al día de la fecha.", exception.getMessage());
     }
@@ -109,8 +124,56 @@ public class EmpleadoServiceImplTest {
     void crearEmpleado_deberiaLanzarExcepcion_cuandoEdadEsMenorA18() {
         empleadoDTO.setFechaNacimiento(LocalDate.now());
 
-        Throwable exception = assertThrows(BusinessException.class, () -> empleadoServiceImplUnderTest.createEmpleado(empleadoDTO));
+        Throwable exception = assertThrows(BusinessException.class,
+                () -> empleadoServiceImplUnderTest.createEmpleado(empleadoDTO));
 
         assertEquals("La edad del empleado no puede ser menor a 18 años.", exception.getMessage());
     }
+
+    // Test para verificar que lanza una excepción si el email ya existe en otro empleado update
+
+    // Test para verificar que lanza una excepción si el número de documento ya existe en otro empleado update
+
+    // Test para verificar que lanza una excepción si la fecha de ingreso es posterior a la actual
+    @Test
+    void updateEmpleado_deberiaLanzarExcepcion_cuandoLaFechaDeIngresoEsPosteriorALaActual() {
+        empleadoDTO.setFechaIngreso(LocalDate.now().plusDays(1));
+
+        when(empleadoRepositoryMock.findById(anyInt())).thenReturn(Optional.of(existingEmpleado));
+
+        BusinessException exception = assertThrows(BusinessException.class,
+                () -> empleadoServiceImplUnderTest.updateEmpleado(1, empleadoDTO));
+
+        assertEquals("La fecha de ingreso no puede ser posterior al día de la fecha.", exception.getMessage());
+    }
+
+    // Test para verificar que lanza una excepción si la fecha de nacimiento es posterior a la actual
+    @Test
+    void updateEmpleado_deberiaLanzarExcepcion_cuandoLaFechaDeNacimientoEsPosteriorALaActual() {
+        empleadoDTO.setFechaNacimiento(LocalDate.now().plusDays(1));
+
+        when(empleadoRepositoryMock.findById(anyInt())).thenReturn(Optional.of(existingEmpleado));
+
+        BusinessException exception = assertThrows(BusinessException.class,
+                () -> empleadoServiceImplUnderTest.updateEmpleado(1, empleadoDTO));
+
+        assertEquals("La fecha de nacimiento no puede ser posterior al día de la fecha.", exception.getMessage());
+    }
+
+    // Test para verificar que lanza una excepción si la edad del empleado es menor a 18 años
+    @Test
+    void updateEmpleado_deberiaLanzarExcepcion_cuandoEdadEsMenorA18() {
+        empleadoDTO.setFechaNacimiento(LocalDate.now());
+
+        when(empleadoRepositoryMock.findById(anyInt())).thenReturn(Optional.of(existingEmpleado));
+
+        BusinessException exception = assertThrows(BusinessException.class,
+                () -> empleadoServiceImplUnderTest.updateEmpleado(1, empleadoDTO));
+
+        assertEquals("La edad del empleado no puede ser menor a 18 años.", exception.getMessage());
+    }
+
+
+
+
 }

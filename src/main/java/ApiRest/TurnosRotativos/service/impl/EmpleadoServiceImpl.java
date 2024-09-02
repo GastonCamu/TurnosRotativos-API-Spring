@@ -54,6 +54,7 @@ public class EmpleadoServiceImpl implements EmpleadoService {
     }
 
     @Override
+    @Transactional
     public EmpleadoDTO updateEmpleado(int id, EmpleadoDTO empleadoDTO) {
         Empleado existingEmpleado = repository.findById(id)
                 .orElseThrow(() -> new BusinessException("No se encontró el empleado con Id: " + id, HttpStatus.NOT_FOUND));
