@@ -1,3 +1,5 @@
+
+
 # API REST Turnos Rotativos
 Spring Initializr: https://start.spring.io/#!type=maven-project&language=java&platformVersion=3.3.3&packaging=jar&jvmVersion=17&groupId=ApiRest&artifactId=TurnosRotativos&name=TurnosRotativos&description=API%20REST%20de%20turnos%20rotativos&packageName=ApiRest.TurnosRotativos&dependencies=web,data-jpa,h2,validation,devtools
 
@@ -17,14 +19,21 @@ Spring Initializr: https://start.spring.io/#!type=maven-project&language=java&pl
 # Estructura de directorios
 
 ## /controller
+### ConceptoLaboralController
+	En el metodo get se esta utilizando los @RequestParam para poder buscar por parametros.
 ### EmpleadoController
 	Tanto en el put como en el create se trabajo con validaciones que se definieron en EmpleadoDTO
 
 ## /dto
+### ConceptoLaboralDTO
+	Estoy usando el JsonInclude para evitar mostrar la hora minima y maxima cuando estas sean nulas.
+
 ### EmpleadoDTO
-Hay definidas diferentes validaciones entre estas están las Pattern en nombre y apellido que permiten solo la admisión de letras.
+	Hay definidas diferentes validaciones entre estas están las Pattern en nombre y apellido que permiten solo la admisión de letras.
 
 ## /entity
+### ConceptoLaboral
+
 ### Empleado
 El manejo de la creación de la fechaCreacion se hizo con PrePersist ya que se toma la fecha del momento exacto en el que se guarda el empleado en la base de datos.
 
@@ -38,19 +47,26 @@ En este proyecto decidí trabajar de manera que a través de el servicio puedo r
 
 ## /mapper
 Este directorio es donde se encuentran las clases que sirven para convertir la entidad en dto y viceversa en caso de que el objeto que se traiga no sea nulo.
+### ConceptoLaboralMapper
+	Cuando el concepto laboral se pasa a entidad se hace una validacion de que si la hora minima o la hora maxima son distintas de null entonces se almacena el dato. Esta validacion se realizo para poder controlar lo que se guarda.
+
 ### EmpleadoMapper
 
 ## /repository
+### ConceptoLaboralRepository
+	Aqio definí metodos que se van a usar en el servicio para retornar valores por filtracion.
 ### EmpleadoRepository
-	Aqui defini metodos que se van a usar en el servicio para las validaciones.
+	Aqui definí metodos que se van a usar en el servicio para las validaciones.
 
 ## /service
-
+Contiene la definicion de los metodos crud del servicio que se va a usar en la implementacion.
+### ConceptoLaboralService
 ### EmpleadoService
-	Contiene la definicion de los metodos crud del empleado que se van a usar en la implementacion.
 
 ### impl
-Aquí se encuentra la implementación de la interfaz EmpleadoService.
+Aquí se encuentra la implementación de la interfaz Service.
+#### ConceptoLaboralServiceImpl
+Hice una validacion que almacena la informacion segun lo que haya recibido por parametro.
 #### EmpleadoServiceImpl
 Tanto para el método de createEmpleado() como para el de updateEmpleado() utilice la anotación @Transactional que permite que no se almacenen datos parciales revirtiendo los cambios en caso de que se apliquen incompletos.
 
@@ -67,6 +83,15 @@ A simple vista la validación del email y el DNI pueden parecer que son iguales 
 En la parte de test comparte similitud en la estructura de directorios con la diferencia de que los archivos tienen la palabra Test al final.
 
 ## /controller
+### ConceptoLaboralControllerTest
+	Se testeo:
+	
+		GET:
+		1. Retorne una todos los conceptos en caso de no usar parametros.
+		2. Retornar todos los conceptos cuya id pasada por parametro.
+		3. Retornar todos los conceptos cuyo nombre completo o parcial pasado por parametro.
+		4. Retornar todos los conceptos cuya id y nombre completo o parcial pasados por parametro.
+
 ### EmpleadoControllerTest
 	Se testeo:
 	
@@ -79,7 +104,14 @@ En la parte de test comparte similitud en la estructura de directorios con la di
 		4. Modificacion correcta del empleado y el status correspondiente. 
 
 ## /mapper
-### /EmpleadoMapperTest
+### ConceptoLaboralMapperTest
+	Se testeo:
+	1. Conversion correcta de ConceptoLaboral (entidad) a ConceptoLaboralDTO (DTO).
+	2. Conversion correcta de ConceptoLaboralDTO (DTO) a ConceptoLaboral (entidad).
+	3. En caso de DTO nulo retornarlo nulo.
+	4. En caso de Entidad nula retornarla nula.
+
+### EmpleadoMapperTest
 	Se testeo:
 	
 	1. Conversion correcta de EmpleadoDTO (DTO) a Empleado (entidad).
@@ -89,6 +121,14 @@ En la parte de test comparte similitud en la estructura de directorios con la di
 
 ## /service
 ### /impl
+#### ConceptoLaboralServiceImplTest
+	Se testeo:
+	
+	Get:
+	1. Obtener conceptos laborales solo con el id.
+	2. Obtener conceptos laborales solo con el nombre.
+	3. Obtener conceptos laborales sin filtros.
+
 #### EmpleadoServiceImplTest
 	Se testeo:
 	
