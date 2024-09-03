@@ -19,7 +19,6 @@ public class EmpleadoMapperTest {
         empleado.setEmail("gastonjouse@gmail.com");
         empleado.setFechaNacimiento(LocalDate.of(2002, 9, 1));
         empleado.setFechaIngreso(LocalDate.of(2023, 9, 1));
-        // fechaCreacion no se establece aquí porque es administrada por la base de datos.
 
         EmpleadoDTO dto = EmpleadoMapper.toDTO(empleado);
 
@@ -31,7 +30,6 @@ public class EmpleadoMapperTest {
         assertThat(dto.getEmail()).isEqualTo(empleado.getEmail());
         assertThat(dto.getFechaNacimiento()).isEqualTo(empleado.getFechaNacimiento());
         assertThat(dto.getFechaIngreso()).isEqualTo(empleado.getFechaIngreso());
-        // Nota: No se verifica fechaCreacion ya que no está en la entidad durante el test.
     }
 
     @Test
