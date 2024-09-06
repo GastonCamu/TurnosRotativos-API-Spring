@@ -2,6 +2,7 @@ package ApiRest.TurnosRotativos.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.PositiveOrZero;
 
 import java.time.LocalDate;
 

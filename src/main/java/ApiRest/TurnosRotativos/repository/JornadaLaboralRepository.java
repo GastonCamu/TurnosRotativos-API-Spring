@@ -113,4 +113,22 @@ public interface JornadaLaboralRepository extends JpaRepository<JornadaLaboral, 
             @Param("nombreConcepto") String nombreConcepto,
             @Param("fecha") LocalDate fecha
     );
+
+    List<JornadaLaboral> findByEmpleadoNroDocumento(Integer nroDocumento);
+
+    List<JornadaLaboral> findByFechaBetween(LocalDate fechaDesde, LocalDate fechaHasta);
+
+    List<JornadaLaboral> findByEmpleadoNroDocumentoAndFechaBetween(Integer nroDocumento, LocalDate fechaDesde, LocalDate fechaHasta);
+
+    @Query("SELECT j FROM JornadaLaboral j WHERE j.fecha >= :fechaDesde")
+    List<JornadaLaboral> findByFechaAfterOrEqual(LocalDate fechaDesde);
+
+    @Query("SELECT j FROM JornadaLaboral j WHERE j.fecha <= :fechaHasta")
+    List<JornadaLaboral> findByFechaBeforeOrEqual(LocalDate fechaHasta);
+
+    @Query("SELECT j FROM JornadaLaboral j WHERE j.empleado.nroDocumento = :nroDocumento AND j.fecha >= :fechaDesde")
+    List<JornadaLaboral> findByEmpleadoNroDocumentoAndFechaAfterOrEqual(@Param("nroDocumento") Integer nroDocumento, @Param("fechaDesde") LocalDate fechaDesde);
+
+    @Query("SELECT j FROM JornadaLaboral j WHERE j.empleado.nroDocumento = :nroDocumento AND j.fecha <= :fechaHasta")
+    List<JornadaLaboral> findByEmpleadoNroDocumentoAndFechaBeforeOrEqual(@Param("nroDocumento") Integer nroDocumento, @Param("fechaHasta") LocalDate fechaHasta);
 }

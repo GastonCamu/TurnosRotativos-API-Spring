@@ -12,10 +12,41 @@ import org.springframework.http.HttpStatus;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.YearMonth;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.Optional;
 
 
 public class JornadaLaboralValidator {
+
+    public static LocalDate convertToLocalDate(String dateStr) {
+        if (dateStr == null) {
+            return null;
+        }
+        try {
+            return LocalDate.parse(dateStr, DateTimeFormatter.ISO_LOCAL_DATE);
+        } catch (DateTimeParseException e) {
+            throw new BusinessException("El formato de la fecha es inválido. Use el formato yyyy-mm-dd");
+        }
+    }
+
+    public static Integer convertToInteger(String nroDocumento) {
+        if (nroDocumento == null) {
+            return null;
+        }
+        try {
+            return Integer.parseInt(nroDocumento);
+
+        } catch (NumberFormatException e) {
+            throw new BusinessException("El campo 'nroDocumento' solo puede contener números enteros.");
+        }
+    }
+
+    public static void validateFechas(LocalDate fechaDesde, LocalDate fechaHasta) {
+        if (fechaDesde.isAfter(fechaHasta)) {
+            throw new BusinessException("El campo 'fechaDesde' no puede ser mayor que 'fechaHasta'.");
+        }
+    }
 
     public static Empleado validateEmpleadoExistence(
             int idEmpleado,

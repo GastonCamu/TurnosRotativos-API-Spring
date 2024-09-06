@@ -14,6 +14,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 public class JornadaLaboralServiceImpl implements JornadaLaboralService {
 
@@ -25,6 +29,47 @@ public class JornadaLaboralServiceImpl implements JornadaLaboralService {
 
     @Autowired
     JornadaLaboralRepository jornadaLaboralRepository;
+
+    @Override
+    public List<JornadaLaboralDTO> getJornadas(String fechaDesde, String fechaHasta, String nroDocumento) {
+        List<JornadaLaboral> jornadas;
+
+        Integer nroDocumentoInt = JornadaLaboralValidator.convertToInteger(nroDocumento);
+
+        LocalDate fechaDesdeDate = JornadaLaboralValidator.convertToLocalDate(fechaDesde);
+        LocalDate fechaHastaDate = JornadaLaboralValidator.convertToLocalDate(fechaHasta);
+
+        if (nroDocumentoInt != null && fechaDesdeDate != null && fechaHastaDate != null) {
+            JornadaLaboralValidator.validateFechas(fechaDesdeDate, fechaHastaDate);
+            jornadas = jornadaLaboralRepository.findByEmpleadoNroDocumentoAndFechaBetween(nroDocumentoInt, fechaDesdeDate, fechaHastaDate);
+
+        } else if (nroDocumentoInt != null && fechaDesdeDate != null) {
+            jornadas = jornadaLaboralRepository.findByEmpleadoNroDocumentoAndFechaAfterOrEqual(nroDocumentoInt, fechaDesdeDate);
+
+        } else if (nroDocumentoInt != null && fechaHastaDate != null) {
+            jornadas = jornadaLaboralRepository.findByEmpleadoNroDocumentoAndFechaBeforeOrEqual(nroDocumentoInt, fechaHastaDate);
+
+        } else if (nroDocumentoInt != null) {
+            jornadas = jornadaLaboralRepository.findByEmpleadoNroDocumento(nroDocumentoInt);
+
+        } else if (fechaDesdeDate != null && fechaHastaDate != null) {
+            JornadaLaboralValidator.validateFechas(fechaDesdeDate, fechaHastaDate);
+            jornadas = jornadaLaboralRepository.findByFechaBetween(fechaDesdeDate, fechaHastaDate);
+
+        } else if (fechaDesdeDate != null) {
+            jornadas = jornadaLaboralRepository.findByFechaAfterOrEqual(fechaDesdeDate);
+
+        } else if (fechaHastaDate != null) {
+            jornadas = jornadaLaboralRepository.findByFechaBeforeOrEqual(fechaHastaDate);
+
+        } else {
+            jornadas = jornadaLaboralRepository.findAll();
+        }
+
+        return jornadas.stream()
+                .map(JornadaLaboralMapper::toDTO)
+                .collect(Collectors.toList());
+    }
 
     @Override
     @Transactional
