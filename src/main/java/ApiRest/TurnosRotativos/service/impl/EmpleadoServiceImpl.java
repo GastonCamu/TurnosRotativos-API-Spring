@@ -5,6 +5,7 @@ import ApiRest.TurnosRotativos.entity.Empleado;
 import ApiRest.TurnosRotativos.exception.BusinessException;
 import ApiRest.TurnosRotativos.mapper.EmpleadoMapper;
 import ApiRest.TurnosRotativos.repository.EmpleadoRepository;
+import ApiRest.TurnosRotativos.repository.JornadaLaboralRepository;
 import ApiRest.TurnosRotativos.service.EmpleadoService;
 import ApiRest.TurnosRotativos.service.validation.EmpleadoValidator;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +22,9 @@ public class EmpleadoServiceImpl implements EmpleadoService {
 
     @Autowired
     EmpleadoRepository repository;
+
+    @Autowired
+    JornadaLaboralRepository jornadaRepo;
 
     @Override
     public EmpleadoDTO getEmpleado(int id) {
@@ -74,6 +78,18 @@ public class EmpleadoServiceImpl implements EmpleadoService {
         Empleado updatedEmpleado = repository.save(existingEmpleado);
 
         return  EmpleadoMapper.toDTO(updatedEmpleado);
+    }
+
+    @Override
+    @Transactional
+    public void deleteEmpleado(Integer id) {
+        Empleado empleado = repository.findById(id)
+                .orElseThrow(() -> new BusinessException("No se encontró el empleado con Id: " + id, HttpStatus.NOT_FOUND));
+
+        EmpleadoValidator.validateExistsJornadaByEmpleadoId(jornadaRepo, id);
+
+        repository.deleteById(id);
+
     }
 
 

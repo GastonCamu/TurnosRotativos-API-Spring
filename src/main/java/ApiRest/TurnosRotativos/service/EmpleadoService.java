@@ -10,5 +10,5 @@ public interface EmpleadoService {
     List<EmpleadoDTO> getEmpleados();
     EmpleadoDTO createEmpleado(EmpleadoDTO empleadoDTO);
     EmpleadoDTO updateEmpleado(int id, EmpleadoDTO empleadoDTO);
-//    public void deleteEmpleado(Long id);
+    void deleteEmpleado(Integer id);
 }

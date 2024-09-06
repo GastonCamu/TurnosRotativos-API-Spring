@@ -4,12 +4,14 @@ import ApiRest.TurnosRotativos.dto.EmpleadoDTO;
 import ApiRest.TurnosRotativos.entity.Empleado;
 import ApiRest.TurnosRotativos.exception.BusinessException;
 import ApiRest.TurnosRotativos.repository.EmpleadoRepository;
+import ApiRest.TurnosRotativos.repository.JornadaLaboralRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.http.HttpStatus;
 
 import java.time.LocalDate;
 import java.util.Collections;
@@ -19,6 +21,7 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -29,6 +32,8 @@ public class EmpleadoServiceImplTest {
 
     @Mock
     private EmpleadoRepository empleadoRepositoryMock;
+    @Mock
+    private JornadaLaboralRepository jornadaRepoMock;
 
     @InjectMocks
     private EmpleadoServiceImpl empleadoServiceImplUnderTest;
@@ -173,7 +178,46 @@ public class EmpleadoServiceImplTest {
         assertEquals("La edad del empleado no puede ser menor a 18 años.", exception.getMessage());
     }
 
+    @Test
+    public void testDeleteEmpleado_NotFound() {
+        Integer id = 1;
 
+        when(empleadoRepositoryMock.findById(id)).thenReturn(Optional.empty());
 
+        BusinessException thrown = assertThrows(BusinessException.class, () -> {
+            empleadoServiceImplUnderTest.deleteEmpleado(id);
+        });
 
+        assertEquals("No se encontró el empleado con Id: " + id, thrown.getMessage());
+        assertEquals(HttpStatus.NOT_FOUND, thrown.getStatus());
+    }
+
+    @Test
+    public void testDeleteEmpleado_WithJornadas() {
+        Integer id = 1;
+        Empleado empleado = new Empleado();
+
+        when(empleadoRepositoryMock.findById(id)).thenReturn(Optional.of(empleado));
+        when(jornadaRepoMock.existsByEmpleadoId(id)).thenReturn(true);
+
+        BusinessException thrown = assertThrows(BusinessException.class, () -> {
+            empleadoServiceImplUnderTest.deleteEmpleado(id);
+        });
+
+        assertEquals("No es posible eliminar un empleado con jornadas asociadas.", thrown.getMessage());
+        assertEquals(HttpStatus.BAD_REQUEST, thrown.getStatus());
+    }
+
+    @Test
+    public void testDeleteEmpleado_Success() {
+        Integer id = 1;
+        Empleado empleado = new Empleado();
+
+        when(empleadoRepositoryMock.findById(id)).thenReturn(Optional.of(empleado));
+        when(jornadaRepoMock.existsByEmpleadoId(id)).thenReturn(false);
+
+        empleadoServiceImplUnderTest.deleteEmpleado(id);
+
+        verify(empleadoRepositoryMock).deleteById(id);
+    }
 }
