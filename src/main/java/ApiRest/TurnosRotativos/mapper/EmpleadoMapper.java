@@ -6,6 +6,7 @@ import ApiRest.TurnosRotativos.entity.Empleado;
 public class EmpleadoMapper {
 
     public static EmpleadoDTO toDTO(Empleado empleado) {
+
         if (empleado == null) {
             return null;
         }
@@ -18,6 +19,7 @@ public class EmpleadoMapper {
         dto.setEmail(empleado.getEmail());
         dto.setFechaNacimiento(empleado.getFechaNacimiento());
         dto.setFechaIngreso(empleado.getFechaIngreso());
+
         if (empleado.getFechaCreacion() != null) {
             dto.setFechaCreacion(empleado.getFechaCreacion().toLocalDate());
         }
@@ -26,6 +28,7 @@ public class EmpleadoMapper {
     }
 
     public static Empleado toEntity(EmpleadoDTO dto) {
+
         if (dto == null) {
             return null;
         }

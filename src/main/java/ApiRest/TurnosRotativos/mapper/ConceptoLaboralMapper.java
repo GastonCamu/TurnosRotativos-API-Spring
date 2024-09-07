@@ -5,6 +5,7 @@ import ApiRest.TurnosRotativos.entity.ConceptoLaboral;
 
 public class ConceptoLaboralMapper {
     public static ConceptoLaboralDTO toDTO(ConceptoLaboral conceptoLaboral) {
+
         if (conceptoLaboral == null) {
             return null;
         }
@@ -20,6 +21,7 @@ public class ConceptoLaboralMapper {
     }
 
     public static ConceptoLaboral toEntity(ConceptoLaboralDTO dto) {
+
         if (dto == null) {
             return null;
         }
@@ -27,6 +29,7 @@ public class ConceptoLaboralMapper {
         conceptoLaboral.setId(dto.getId());
         conceptoLaboral.setNombre(dto.getNombre());
         conceptoLaboral.setLaborable(dto.getLaborable());
+
         if (dto.getHsMinimo() != null) {
             conceptoLaboral.setHsMinimo(dto.getHsMinimo());
         }

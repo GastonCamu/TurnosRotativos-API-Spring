@@ -13,7 +13,7 @@ public class ConceptoLaboralMapperTest {
     public void testToDTO() {
 
         ConceptoLaboral conceptoLaboral = new ConceptoLaboral();
-        conceptoLaboral.setId(1);
+        conceptoLaboral.setId(1L);
         conceptoLaboral.setNombre("Concepto");
         conceptoLaboral.setLaborable(true);
         conceptoLaboral.setHsMinimo(5);
@@ -40,7 +40,7 @@ public class ConceptoLaboralMapperTest {
     public void testToEntity() {
 
         ConceptoLaboralDTO dto = new ConceptoLaboralDTO();
-        dto.setId(1);
+        dto.setId(1L);
         dto.setNombre("Concepto");
         dto.setLaborable(true);
         dto.setHsMinimo(5);

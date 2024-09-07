@@ -32,6 +32,7 @@ public class JornadaLaboralServiceImpl implements JornadaLaboralService {
 
     @Override
     public List<JornadaLaboralDTO> getJornadas(String fechaDesde, String fechaHasta, String nroDocumento) {
+
         List<JornadaLaboral> jornadas;
 
         Integer nroDocumentoInt = JornadaLaboralValidator.convertToInteger(nroDocumento);

@@ -17,8 +17,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import java.time.LocalDate;
 import java.util.Collections;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.when;
 
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -41,7 +40,7 @@ public class EmpleadoControllerTest {
     @BeforeEach
     void setUp() {
         objectMapper = new ObjectMapper();
-        objectMapper.registerModule(new JavaTimeModule()); // Registra el módulo para LocalDate
+        objectMapper.registerModule(new JavaTimeModule());
 
         empleadoDTO = new EmpleadoDTO();
         empleadoDTO.setNombre("Gaston");
@@ -54,7 +53,8 @@ public class EmpleadoControllerTest {
 
     @Test
     void getEmpleado_deberiaRetornarEmpleado() throws Exception {
-        when(empleadoService.getEmpleado(anyInt())).thenReturn(empleadoDTO);
+
+        when(empleadoService.getEmpleado(anyLong())).thenReturn(empleadoDTO);
 
         mockMvc.perform(MockMvcRequestBuilders.get("/empleado/1"))
                 .andExpect(MockMvcResultMatchers.status().isOk())
@@ -63,6 +63,7 @@ public class EmpleadoControllerTest {
 
     @Test
     void getEmpleados_deberiaRetornarListaDeEmpleados() throws Exception {
+
         when(empleadoService.getEmpleados()).thenReturn(Collections.singletonList(empleadoDTO));
 
         mockMvc.perform(MockMvcRequestBuilders.get("/empleado"))
@@ -72,6 +73,7 @@ public class EmpleadoControllerTest {
 
     @Test
     void createEmpleado_deberiaCrearEmpleado() throws Exception {
+
         when(empleadoService.createEmpleado(any(EmpleadoDTO.class))).thenReturn(empleadoDTO);
 
         mockMvc.perform(MockMvcRequestBuilders.post("/empleado")
@@ -83,7 +85,8 @@ public class EmpleadoControllerTest {
 
     @Test
     void putEmpleado_deberiaActualizarEmpleado() throws Exception {
-        when(empleadoService.updateEmpleado(anyInt(), any(EmpleadoDTO.class))).thenReturn(empleadoDTO);
+
+        when(empleadoService.updateEmpleado(anyLong(), any(EmpleadoDTO.class))).thenReturn(empleadoDTO);
 
         mockMvc.perform(MockMvcRequestBuilders.put("/empleado/1")
                         .contentType(MediaType.APPLICATION_JSON)

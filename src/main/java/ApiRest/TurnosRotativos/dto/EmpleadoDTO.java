@@ -9,8 +9,10 @@ import java.time.LocalDate;
 
 public class EmpleadoDTO {
 
-    private int id;
-    private int nroDocumento;
+    private Long id;
+    @NotNull(message = "nroDocumento es obligatorio.")
+
+    private Integer nroDocumento;
 
     @NotBlank(message = "nombre es obligatorio.")
     @Pattern(regexp = "^[a-zA-Z]+$", message = "Solo se permiten letras en el campo 'nombre'")
@@ -33,19 +35,19 @@ public class EmpleadoDTO {
 
     private LocalDate fechaCreacion;
 
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
-    public int getNroDocumento() {
+    public Integer getNroDocumento() {
         return nroDocumento;
     }
 
-    public void setNroDocumento(int nroDocumento) {
+    public void setNroDocumento(Integer nroDocumento) {
         this.nroDocumento = nroDocumento;
     }
 

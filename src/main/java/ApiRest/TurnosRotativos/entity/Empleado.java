@@ -12,10 +12,10 @@ public class Empleado {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id")
-    private int id;
+    private Long id;
 
     @Column(name = "nro_documento", nullable = false)
-    private int nroDocumento;
+    private Integer nroDocumento;
 
     @Column(name = "nombre", nullable = false)
     private String nombre;
@@ -40,19 +40,19 @@ public class Empleado {
         this.fechaCreacion = LocalDateTime.now();
     }
 
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
-    public int getNroDocumento() {
+    public Integer getNroDocumento() {
         return nroDocumento;
     }
 
-    public void setNroDocumento(int nroDocumento) {
+    public void setNroDocumento(Integer nroDocumento) {
         this.nroDocumento = nroDocumento;
     }
 

@@ -5,19 +5,18 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class ConceptoLaboralDTO {
 
-    private int id;
-
+    private Long id;
     private String nombre;
     private Integer hsMinimo;
     private Integer hsMaximo;
     private Boolean laborable;
 
 
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

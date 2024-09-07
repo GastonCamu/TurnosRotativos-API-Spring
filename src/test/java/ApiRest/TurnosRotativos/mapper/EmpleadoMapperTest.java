@@ -10,9 +10,9 @@ public class EmpleadoMapperTest {
 
     @Test
     void dadoEmpleadoCuandoConvertirADTOEntoncesCorrecto() {
-        // Arrange
+
         Empleado empleado = new Empleado();
-        empleado.setId(1);
+        empleado.setId(1L);
         empleado.setNroDocumento(32444321);
         empleado.setNombre("Gaston");
         empleado.setApellido("Jouse");
@@ -34,6 +34,7 @@ public class EmpleadoMapperTest {
 
     @Test
     void dadoEmpleadoDTOCuandoConvertirAEntidadEntoncesCorrecto() {
+
         EmpleadoDTO dto = new EmpleadoDTO();
         dto.setNroDocumento(32444321);
         dto.setNombre("Gaston");

@@ -2,15 +2,14 @@ package ApiRest.TurnosRotativos.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.PositiveOrZero;
 
 import java.time.LocalDate;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class JornadaLaboralDTO {
 
-    private int id;
-    private int nroDocumento;
+    private Long id;
+    private Integer nroDocumento;
     private String nombreCompleto;
 
     @NotNull(message = "fecha es obligatorio.")
@@ -20,16 +19,16 @@ public class JornadaLaboralDTO {
     private Integer hsTrabajadas;
 
     @NotNull(message = "idEmpleado es obligatorio.")
-    private Integer idEmpleado;
+    private Long idEmpleado;
 
     @NotNull(message = "idConcepto es obligatorio.")
-    private Integer idConcepto;
+    private Long idConcepto;
 
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -49,11 +48,11 @@ public class JornadaLaboralDTO {
         this.hsTrabajadas = hsTrabajadas;
     }
 
-    public Integer getIdEmpleado() {
+    public Long getIdEmpleado() {
         return idEmpleado;
     }
 
-    public void setIdEmpleado(Integer idEmpleado) {
+    public void setIdEmpleado(Long idEmpleado) {
         this.idEmpleado = idEmpleado;
     }
 
@@ -65,19 +64,19 @@ public class JornadaLaboralDTO {
         this.nombreCompleto = nombreCompleto;
     }
 
-    public int getNroDocumento() {
+    public Integer getNroDocumento() {
         return nroDocumento;
     }
 
-    public void setNroDocumento(int nroDocumento) {
+    public void setNroDocumento(Integer nroDocumento) {
         this.nroDocumento = nroDocumento;
     }
 
-    public Integer getIdConcepto() {
+    public Long getIdConcepto() {
         return idConcepto;
     }
 
-    public void setIdConcepto(Integer idConcepto) {
+    public void setIdConcepto(Long idConcepto) {
         this.idConcepto = idConcepto;
     }
 

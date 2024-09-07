@@ -49,7 +49,7 @@ public class JornadaLaboralValidator {
     }
 
     public static Empleado validateEmpleadoExistence(
-            int idEmpleado,
+            Long idEmpleado,
             EmpleadoRepository empleadoRepository) {
 
         return empleadoRepository.findById(idEmpleado)
@@ -58,7 +58,7 @@ public class JornadaLaboralValidator {
     }
 
     public static ConceptoLaboral validateConceptoLaboralExistence(
-            int idConcepto,
+            Long idConcepto,
             ConceptoLaboralRepository conceptoLaboralRepository) {
 
         return conceptoLaboralRepository.findById(idConcepto)
@@ -93,8 +93,8 @@ public class JornadaLaboralValidator {
             Integer hsTrabajadas = jornadaDTO.getHsTrabajadas();
             Integer hsMinimo = concepto.get().getHsMinimo();
             Integer hsMaximo = concepto.get().getHsMaximo();
-            Integer idEmpleado = jornadaDTO.getIdEmpleado();
-            Integer idConcepto = jornadaDTO.getIdConcepto();
+            Long idEmpleado = jornadaDTO.getIdEmpleado();
+            Long idConcepto = jornadaDTO.getIdConcepto();
             LocalDate fecha = jornadaDTO.getFecha();
 
             // RN 10
@@ -103,8 +103,7 @@ public class JornadaLaboralValidator {
             // RN 11
             validateNoDuplicateConceptPerDay(jornadaRepo,idEmpleado, idConcepto, fecha);
 
-            if(validateTurnos(conceptoNombre)) {
-
+            if (validateTurnos(conceptoNombre)) {
                 // RN 1
                 validateHorasTrabajadas(hsTrabajadas, hsMinimo, hsMaximo);
 
@@ -120,11 +119,16 @@ public class JornadaLaboralValidator {
                 // RN 5
                 validateDayOff(jornadaRepo, idEmpleado, fecha);
 
-                // RN 6
-                validateExtraShiftsLimitPerWeek(jornadaRepo, fecha, idEmpleado);
+                if(conceptoNombre.equals("Turno Normal")) {
 
-                // RN 7
-                validateNormalShiftsLimitPerWeek(jornadaRepo, fecha, idEmpleado);
+                    // RN 7
+                    validateNormalShiftsLimitPerWeek(jornadaRepo, fecha, idEmpleado);
+
+                }
+                else if (conceptoNombre.equals("Turno Extra")) {
+                    // RN 6
+                    validateExtraShiftsLimitPerWeek(jornadaRepo, fecha, idEmpleado);
+                }
 
             } else {
                 // RN 8
@@ -160,7 +164,7 @@ public class JornadaLaboralValidator {
     static void validateDailyHoursLimit(
             JornadaLaboralRepository jornadaRepo,
             LocalDate fecha,
-            Integer idEmpleado,
+            Long idEmpleado,
             Integer hsTrabajadas) {
 
         Integer hsTrabajadasEnBD = jornadaRepo.sumHsTrabajadasByEmpleadoIdAndFecha(idEmpleado, fecha);
@@ -179,7 +183,7 @@ public class JornadaLaboralValidator {
     private static void validateWeeklyHoursLimit(
             JornadaLaboralRepository jornadaRepo,
             LocalDate fecha,
-            Integer idEmpleado,
+            Long idEmpleado,
             Integer hsTrabajadas) {
 
         LocalDate startOfWeek = getWeekStart(fecha);
@@ -195,7 +199,7 @@ public class JornadaLaboralValidator {
     private static void validateMonthYHoursLimit(
             JornadaLaboralRepository jornadaRepo,
             LocalDate fecha,
-            Integer idEmpleado,
+            Long idEmpleado,
             Integer hsTrabajadas) {
 
         YearMonth yearMonth = YearMonth.of(fecha.getYear(), fecha.getMonth());
@@ -213,7 +217,7 @@ public class JornadaLaboralValidator {
 
     private static void validateDayOff(
             JornadaLaboralRepository jornadaRepo,
-            Integer idEmpleado,
+            Long idEmpleado,
             LocalDate fecha) {
 
         if (jornadaRepo.existsDiaLibreByEmpleadoIdAndFecha(idEmpleado, fecha)) {
@@ -224,7 +228,7 @@ public class JornadaLaboralValidator {
     private static void validateExtraShiftsLimitPerWeek(
             JornadaLaboralRepository jornadaRepo,
             LocalDate fecha,
-            Integer idEmpleado) {
+            Long idEmpleado) {
 
         LocalDate startOfWeek = getWeekStart(fecha);
         LocalDate endOfWeek = getWeekEnd(fecha);
@@ -238,7 +242,7 @@ public class JornadaLaboralValidator {
     private static void validateNormalShiftsLimitPerWeek(
             JornadaLaboralRepository jornadaRepo,
             LocalDate fecha,
-            Integer idEmpleado) {
+            Long idEmpleado) {
 
         LocalDate startOfWeek = getWeekStart(fecha);
         LocalDate endOfWeek = getWeekEnd(fecha);
@@ -252,7 +256,7 @@ public class JornadaLaboralValidator {
     static void validateLibreShiftsLimitPerWeek(
             JornadaLaboralRepository jornadaRepo,
             LocalDate fecha,
-            Integer idEmpleado) {
+            Long idEmpleado) {
 
         LocalDate startOfWeek = getWeekStart(fecha);
         LocalDate endOfWeek = getWeekEnd(fecha);
@@ -266,7 +270,7 @@ public class JornadaLaboralValidator {
     private static void validateLibreShiftsLimitPerMonth(
             JornadaLaboralRepository jornadaRepo ,
             LocalDate fecha,
-            Integer idEmpleado) {
+            Long idEmpleado) {
 
         YearMonth yearMonth = YearMonth.of(fecha.getYear(), fecha.getMonth());
         LocalDate startOfMonth = yearMonth.atDay(1);
@@ -293,8 +297,8 @@ public class JornadaLaboralValidator {
 
     private static void validateNoDuplicateConceptPerDay(
             JornadaLaboralRepository jornadaRepo,
-            Integer idEmpleado,
-            Integer idConcepto,
+            Long idEmpleado,
+            Long idConcepto,
             LocalDate fecha) {
 
         if (jornadaRepo.existsByEmpleadoIdAndConceptoLaboralIdAndFecha(idEmpleado, idConcepto, fecha)) {

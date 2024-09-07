@@ -3,7 +3,6 @@ package ApiRest.TurnosRotativos.controller;
 import ApiRest.TurnosRotativos.dto.EmpleadoDTO;
 import ApiRest.TurnosRotativos.service.EmpleadoService;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,7 +19,7 @@ public class EmpleadoController {
 
     @PutMapping("/{empleadoId}")
     public ResponseEntity<EmpleadoDTO> putEmpleado(
-            @PathVariable("empleadoId") int id,
+            @PathVariable("empleadoId") Long id,
             @Valid
             @RequestBody EmpleadoDTO empleadoDTO) {
 
@@ -29,24 +28,27 @@ public class EmpleadoController {
     }
 
     @GetMapping("/{empleadoId}")
-    public ResponseEntity<EmpleadoDTO> getEmpleado(@PathVariable("empleadoId") int id) {
+    public ResponseEntity<EmpleadoDTO> getEmpleado(@PathVariable("empleadoId") Long id) {
     EmpleadoDTO empleadoDTO = this.empleadoService.getEmpleado(id);
     return ResponseEntity.ok(empleadoDTO);
     }
 
     @GetMapping
-    public ResponseEntity<List<EmpleadoDTO>> getEmpelados() {
+    public ResponseEntity<List<EmpleadoDTO>> getEmpleados() {
         List<EmpleadoDTO> empleados = this.empleadoService.getEmpleados();
         return ResponseEntity.ok(empleados);
     }
+
     @PostMapping
     public ResponseEntity<EmpleadoDTO> createEmpleado(@Valid @RequestBody EmpleadoDTO empleadoDTO) {
         EmpleadoDTO empleado = this.empleadoService.createEmpleado(empleadoDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(empleado);
     }
+
     @DeleteMapping("/{empleadoId}")
-    public ResponseEntity deleteEmpleado(@PathVariable("empleadoId") Integer id) {
+    public ResponseEntity deleteEmpleado(@PathVariable("empleadoId") Long id) {
         empleadoService.deleteEmpleado(id);
         return ResponseEntity.noContent().build();
     }
+
 }

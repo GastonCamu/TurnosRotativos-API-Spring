@@ -15,22 +15,25 @@ import java.util.Optional;
 public class EmpleadoValidator {
 
     public static void validateEdad(EmpleadoDTO empleadoDTO) {
+
         int edad = Period.between(empleadoDTO.getFechaNacimiento(), LocalDate.now()).getYears();
         if (edad < 18) {
-            throw new BusinessException("La edad del empleado no puede ser menor a 18 años.", HttpStatus.BAD_REQUEST);
+            throw new BusinessException("La edad del empleado no puede ser menor a 18 años.");
         }
     }
 
     public static void validateFechas(EmpleadoDTO empleadoDTO) {
+
         if (empleadoDTO.getFechaIngreso().isAfter(LocalDate.now())) {
-            throw new BusinessException("La fecha de ingreso no puede ser posterior al día de la fecha.", HttpStatus.BAD_REQUEST);
+            throw new BusinessException("La fecha de ingreso no puede ser posterior al día de la fecha.");
         }
         if (empleadoDTO.getFechaNacimiento().isAfter(LocalDate.now())) {
-            throw new BusinessException("La fecha de nacimiento no puede ser posterior al día de la fecha.", HttpStatus.BAD_REQUEST);
+            throw new BusinessException("La fecha de nacimiento no puede ser posterior al día de la fecha.");
         }
     }
 
     public static void validateUniqueFields(EmpleadoDTO empleadoDTO, EmpleadoRepository repository) {
+
         if (repository.existsByNroDocumento(empleadoDTO.getNroDocumento())) {
             throw new BusinessException("Ya existe un empleado con el documento ingresado.", HttpStatus.CONFLICT);
         }
@@ -56,7 +59,8 @@ public class EmpleadoValidator {
         }
     }
 
-    public static void validateExistsJornadaByEmpleadoId(JornadaLaboralRepository jornadaRepo, Integer id) {
+    public static void validateExistsJornadaByEmpleadoId(JornadaLaboralRepository jornadaRepo, Long id) {
+
         if(jornadaRepo.existsByEmpleadoId(id)) {
             throw new BusinessException("No es posible eliminar un empleado con jornadas asociadas.");
         }

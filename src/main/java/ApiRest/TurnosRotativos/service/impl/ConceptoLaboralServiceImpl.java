@@ -19,7 +19,8 @@ public class ConceptoLaboralServiceImpl implements ConceptoLaboralService {
     ConceptoLaboralRepository repository;
 
     @Override
-    public List<ConceptoLaboralDTO> getConceptosLaborales(Integer id, String nombre) {
+    public List<ConceptoLaboralDTO> getConceptosLaborales(Long id, String nombre) {
+
         List<ConceptoLaboral> conceptosLaborales;
 
         if (id != null && nombre != null) {
@@ -36,5 +37,6 @@ public class ConceptoLaboralServiceImpl implements ConceptoLaboralService {
         return conceptosLaborales.stream()
                 .map(ConceptoLaboralMapper::toDTO)
                 .collect(Collectors.toList());
+
     }
 }

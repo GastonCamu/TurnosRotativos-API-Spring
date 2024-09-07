@@ -8,26 +8,28 @@ import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Optional;
 
 @Repository
-public interface JornadaLaboralRepository extends JpaRepository<JornadaLaboral, Integer> {
+public interface JornadaLaboralRepository extends JpaRepository<JornadaLaboral, Long> {
 
     @Query("SELECT SUM(j.hsTrabajadas) " +
             "FROM JornadaLaboral j " +
             "WHERE j.empleado.id = :idEmpleado AND j.fecha = :fecha")
     Integer sumHsTrabajadasByEmpleadoIdAndFecha(
-            @Param("idEmpleado") Integer idEmpleado,
+            @Param("idEmpleado") Long idEmpleado,
             @Param("fecha") LocalDate fecha
     );
 
-    boolean existsByEmpleadoIdAndConceptoLaboralIdAndFecha(int empleadoId, int ConceptoLaboralId, LocalDate fecha);
+    boolean existsByEmpleadoIdAndConceptoLaboralIdAndFecha(
+            Long empleadoId,
+            Long ConceptoLaboralId,
+            LocalDate fecha);
 
     @Query("SELECT COALESCE(SUM(j.hsTrabajadas), 0) " +
             "FROM JornadaLaboral j " +
             "WHERE j.empleado.id = :empleadoId AND j.fecha BETWEEN :startOfWeek AND :endOfWeek")
     Integer sumHsTrabajadasByEmpleadoIdAndWeek(
-            @Param("empleadoId") Integer empleadoId,
+            @Param("empleadoId") Long empleadoId,
             @Param("startOfWeek") LocalDate startOfWeek,
             @Param("endOfWeek") LocalDate endOfWeek
     );
@@ -36,7 +38,7 @@ public interface JornadaLaboralRepository extends JpaRepository<JornadaLaboral, 
             "FROM JornadaLaboral j " +
             "WHERE j.empleado.id = :empleadoId AND j.fecha BETWEEN :startOfMonth AND :endOfMonth")
     Integer sumHsTrabajadasByEmpleadoIdAndMonth(
-            @Param("empleadoId") Integer empleadoId,
+            @Param("empleadoId") Long empleadoId,
             @Param("startOfMonth") LocalDate startOfMonth,
             @Param("endOfMonth") LocalDate endOfMonth
     );
@@ -51,7 +53,7 @@ public interface JornadaLaboralRepository extends JpaRepository<JornadaLaboral, 
             "   WHERE c.nombre = 'Día Libre'" +
             ")")
     boolean existsDiaLibreByEmpleadoIdAndFecha(
-            @Param("empleadoId") int empleadoId,
+            @Param("empleadoId") Long empleadoId,
             @Param("fecha") LocalDate fecha
     );
 
@@ -62,7 +64,7 @@ public interface JornadaLaboralRepository extends JpaRepository<JornadaLaboral, 
             "AND j.fecha BETWEEN :startOfWeek " +
             "AND :endOfWeek")
     int countExtraShiftByEmpleadoIdAndWeek(
-            @Param("empleadoId") int empleadoId,
+            @Param("empleadoId") Long empleadoId,
             @Param("startOfWeek") LocalDate startOfWeek,
             @Param("endOfWeek") LocalDate endOfWeek
     );
@@ -74,7 +76,7 @@ public interface JornadaLaboralRepository extends JpaRepository<JornadaLaboral, 
             "AND j.fecha BETWEEN :startOfWeek " +
             "AND :endOfWeek")
     int countNormalShiftByEmpleadoIdAndWeek(
-            @Param("empleadoId") int empleadoId,
+            @Param("empleadoId") Long empleadoId,
             @Param("startOfWeek") LocalDate startOfWeek,
             @Param("endOfWeek") LocalDate endOfWeek
     );
@@ -86,7 +88,7 @@ public interface JornadaLaboralRepository extends JpaRepository<JornadaLaboral, 
             "AND j.fecha BETWEEN :startOfWeek " +
             "AND :endOfWeek")
     int countLibreShiftByEmpleadoIdAndWeek(
-            @Param("empleadoId") int empleadoId,
+            @Param("empleadoId") Long empleadoId,
             @Param("startOfWeek") LocalDate startOfWeek,
             @Param("endOfWeek") LocalDate endOfWeek
     );
@@ -98,7 +100,7 @@ public interface JornadaLaboralRepository extends JpaRepository<JornadaLaboral, 
             "AND j.fecha BETWEEN :startOfMonth " +
             "AND :endOfMonth")
     int countLibreShiftByEmpleadoIdAndMonth(
-            @Param("empleadoId") int empleadoId,
+            @Param("empleadoId") Long empleadoId,
             @Param("startOfMonth") LocalDate startOfMonth,
             @Param("endOfMonth") LocalDate endOfMonth
     );
@@ -126,11 +128,21 @@ public interface JornadaLaboralRepository extends JpaRepository<JornadaLaboral, 
     @Query("SELECT j FROM JornadaLaboral j WHERE j.fecha <= :fechaHasta")
     List<JornadaLaboral> findByFechaBeforeOrEqual(LocalDate fechaHasta);
 
-    @Query("SELECT j FROM JornadaLaboral j WHERE j.empleado.nroDocumento = :nroDocumento AND j.fecha >= :fechaDesde")
-    List<JornadaLaboral> findByEmpleadoNroDocumentoAndFechaAfterOrEqual(@Param("nroDocumento") Integer nroDocumento, @Param("fechaDesde") LocalDate fechaDesde);
+    @Query("SELECT j " +
+            "FROM JornadaLaboral j " +
+            "WHERE j.empleado.nroDocumento = :nroDocumento " +
+            "AND j.fecha >= :fechaDesde")
+    List<JornadaLaboral> findByEmpleadoNroDocumentoAndFechaAfterOrEqual(
+            @Param("nroDocumento") Integer nroDocumento,
+            @Param("fechaDesde") LocalDate fechaDesde);
 
-    @Query("SELECT j FROM JornadaLaboral j WHERE j.empleado.nroDocumento = :nroDocumento AND j.fecha <= :fechaHasta")
-    List<JornadaLaboral> findByEmpleadoNroDocumentoAndFechaBeforeOrEqual(@Param("nroDocumento") Integer nroDocumento, @Param("fechaHasta") LocalDate fechaHasta);
+    @Query("SELECT j " +
+            "FROM JornadaLaboral j " +
+            "WHERE j.empleado.nroDocumento = :nroDocumento " +
+            "AND j.fecha <= :fechaHasta")
+    List<JornadaLaboral> findByEmpleadoNroDocumentoAndFechaBeforeOrEqual(
+            @Param("nroDocumento") Integer nroDocumento,
+            @Param("fechaHasta") LocalDate fechaHasta);
 
-    boolean existsByEmpleadoId(int empleadoId);
+    boolean existsByEmpleadoId(Long empleadoId);
 }

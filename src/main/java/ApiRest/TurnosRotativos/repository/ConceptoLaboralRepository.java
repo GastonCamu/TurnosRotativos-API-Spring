@@ -9,12 +9,12 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface ConceptoLaboralRepository extends JpaRepository<ConceptoLaboral, Integer> {
+public interface ConceptoLaboralRepository extends JpaRepository<ConceptoLaboral, Long> {
 
     List<ConceptoLaboral> findByNombreContainingIgnoreCase(String nombre);
 
-    List<ConceptoLaboral> findByIdAndNombreContainingIgnoreCase(Integer id, String nombre);
+    List<ConceptoLaboral> findByIdAndNombreContainingIgnoreCase(Long id, String nombre);
 
     @Query("SELECT c.nombre FROM ConceptoLaboral c WHERE c.id = :id")
-    String findNombreById(@Param("id") Integer id);
+    String findNombreById(@Param("id") Long id);
 }

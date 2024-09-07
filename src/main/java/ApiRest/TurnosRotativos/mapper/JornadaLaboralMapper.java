@@ -8,6 +8,7 @@ import ApiRest.TurnosRotativos.entity.JornadaLaboral;
 public class JornadaLaboralMapper {
 
     public static JornadaLaboralDTO toDTO(JornadaLaboral jornadaLaboral) {
+
         JornadaLaboralDTO dto = new JornadaLaboralDTO();
         dto.setId(jornadaLaboral.getId());
         dto.setFecha(jornadaLaboral.getFecha());
@@ -26,7 +27,11 @@ public class JornadaLaboralMapper {
         return dto;
     }
 
-    public static JornadaLaboral toEntity(JornadaLaboralDTO dto, Empleado empleado, ConceptoLaboral conceptoLaboral) {
+    public static JornadaLaboral toEntity(
+            JornadaLaboralDTO dto,
+            Empleado empleado,
+            ConceptoLaboral conceptoLaboral) {
+
         JornadaLaboral jornadaLaboral = new JornadaLaboral();
         jornadaLaboral.setFecha(dto.getFecha());
         jornadaLaboral.setHsTrabajadas(dto.getHsTrabajadas());

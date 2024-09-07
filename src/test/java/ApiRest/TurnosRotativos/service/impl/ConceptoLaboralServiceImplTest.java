@@ -29,7 +29,7 @@ public class ConceptoLaboralServiceImplTest {
         MockitoAnnotations.openMocks(this);
 
         conceptoLaboral = new ConceptoLaboral();
-        conceptoLaboral.setId(1);
+        conceptoLaboral.setId(1L);
         conceptoLaboral.setNombre("Concepto");
         conceptoLaboral.setLaborable(true);
         conceptoLaboral.setHsMinimo(5);
@@ -39,7 +39,7 @@ public class ConceptoLaboralServiceImplTest {
     @Test
     public void testObtenerConceptosLaboralesConIdYNombre() {
 
-        Integer id = 1;
+        Long id = 1L;
         String nombre = "Concepto";
         when(repositorio.findByIdAndNombreContainingIgnoreCase(id, nombre)).thenReturn(List.of(conceptoLaboral));
 
@@ -56,7 +56,7 @@ public class ConceptoLaboralServiceImplTest {
     @Test
     public void testObtenerConceptosLaboralesConIdSolo() {
 
-        Integer id = 1;
+        Long id = 1L;
         when(repositorio.findById(id)).thenReturn(Optional.of(conceptoLaboral));
 
         List<ConceptoLaboralDTO> resultado = conceptoLaboralServicio.getConceptosLaborales(id, null);

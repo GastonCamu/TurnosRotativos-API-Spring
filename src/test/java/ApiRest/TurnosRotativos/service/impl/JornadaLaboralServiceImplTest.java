@@ -31,7 +31,7 @@ public class JornadaLaboralServiceImplTest {
 
     @Test
     public void obtenerJornadasConFechasYDocumento() {
-        // Datos de prueba
+
         String fechaDesde = "2024-01-01";
         String fechaHasta = "2024-01-31";
         String nroDocumento = "12345";

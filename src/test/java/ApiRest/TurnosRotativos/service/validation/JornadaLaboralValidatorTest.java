@@ -4,7 +4,6 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 import ApiRest.TurnosRotativos.dto.JornadaLaboralDTO;
-import ApiRest.TurnosRotativos.entity.ConceptoLaboral;
 import ApiRest.TurnosRotativos.exception.BusinessException;
 import ApiRest.TurnosRotativos.repository.ConceptoLaboralRepository;
 import ApiRest.TurnosRotativos.repository.EmpleadoRepository;
@@ -37,10 +36,10 @@ public class JornadaLaboralValidatorTest {
     @Test
     void testValidarExistenciaEmpleado_EmpleadoNoEncontrado() {
 
-        when(empleadoRepositoryMock.findById(1)).thenReturn(Optional.empty());
+        when(empleadoRepositoryMock.findById(1L)).thenReturn(Optional.empty());
 
         BusinessException exception = assertThrows(BusinessException.class, () -> {
-            JornadaLaboralValidator.validateEmpleadoExistence(1, empleadoRepositoryMock);
+            JornadaLaboralValidator.validateEmpleadoExistence(1L, empleadoRepositoryMock);
         });
         assertEquals("No existe el empleado ingresado.", exception.getMessage());
     }
@@ -49,10 +48,10 @@ public class JornadaLaboralValidatorTest {
     void testValidateHsTrabajadasByConcepto_HsTrabajadasObligatorio() {
 
         JornadaLaboralDTO jornadaDTO = new JornadaLaboralDTO();
-        jornadaDTO.setIdConcepto(1);
+        jornadaDTO.setIdConcepto(1L);
         jornadaDTO.setHsTrabajadas(null);
 
-        when(conceptoLaboralRepositoryMock.findNombreById(1)).thenReturn("Turno Normal");
+        when(conceptoLaboralRepositoryMock.findNombreById(1L)).thenReturn("Turno Normal");
 
         BusinessException exception = assertThrows(BusinessException.class, () -> {
             JornadaLaboralValidator.validateHsTrabajadasByConcepto(jornadaDTO, conceptoLaboralRepositoryMock);
@@ -64,16 +63,16 @@ public class JornadaLaboralValidatorTest {
     void testValidarLimiteHorasDiarias_SuperaLimite() {
 
         JornadaLaboralDTO jornadaDTO = new JornadaLaboralDTO();
-        jornadaDTO.setIdEmpleado(1);
+        jornadaDTO.setIdEmpleado(1L);
         jornadaDTO.setHsTrabajadas(10);
         jornadaDTO.setFecha(LocalDate.of(2024, 9, 5));
 
-        when(jornadaLaboralRepositoryMock.sumHsTrabajadasByEmpleadoIdAndFecha(1, LocalDate.of(2024, 9, 5)))
+        when(jornadaLaboralRepositoryMock.sumHsTrabajadasByEmpleadoIdAndFecha(1L, LocalDate.of(2024, 9, 5)))
                 .thenReturn(10);
 
 
         BusinessException exception = assertThrows(BusinessException.class, () -> {
-            JornadaLaboralValidator.validateDailyHoursLimit(jornadaLaboralRepositoryMock, LocalDate.of(2024, 9, 5), 1, 10);
+            JornadaLaboralValidator.validateDailyHoursLimit(jornadaLaboralRepositoryMock, LocalDate.of(2024, 9, 5), 1L, 10);
         });
         assertEquals("Un empleado no puede cargar más de 14 horas trabajadas en un día.", exception.getMessage());
     }
@@ -82,24 +81,24 @@ public class JornadaLaboralValidatorTest {
     void testValidarLimiteTurnosLibresPorSemana_SuperaLimite() {
 
         JornadaLaboralDTO jornadaDTO = new JornadaLaboralDTO();
-        jornadaDTO.setIdEmpleado(1);
+        jornadaDTO.setIdEmpleado(1L);
         jornadaDTO.setFecha(LocalDate.of(2024, 9, 2));
 
-        when(jornadaLaboralRepositoryMock.countLibreShiftByEmpleadoIdAndWeek(1, LocalDate.of(2024, 9, 2).with(DayOfWeek.MONDAY), LocalDate.of(2024, 9, 2).with(DayOfWeek.SUNDAY)))
+        when(jornadaLaboralRepositoryMock.countLibreShiftByEmpleadoIdAndWeek(1L, LocalDate.of(2024, 9, 2).with(DayOfWeek.MONDAY), LocalDate.of(2024, 9, 2).with(DayOfWeek.SUNDAY)))
                 .thenReturn(2);
 
         BusinessException exception = assertThrows(BusinessException.class, () -> {
-            JornadaLaboralValidator.validateLibreShiftsLimitPerWeek(jornadaLaboralRepositoryMock, LocalDate.of(2024, 9, 2), 1);
+            JornadaLaboralValidator.validateLibreShiftsLimitPerWeek(jornadaLaboralRepositoryMock, LocalDate.of(2024, 9, 2), 1L);
         });
         assertEquals("El empleado no cuenta con más días libres esta semana.", exception.getMessage());
     }
 
     @Test
     void testValidarExistenciaConceptoLaboral_ConceptoNoEncontrado() {
-        when(conceptoLaboralRepositoryMock.findById(1)).thenReturn(Optional.empty());
+        when(conceptoLaboralRepositoryMock.findById(1L)).thenReturn(Optional.empty());
 
         BusinessException exception = assertThrows(BusinessException.class, () -> {
-            JornadaLaboralValidator.validateConceptoLaboralExistence(1, conceptoLaboralRepositoryMock);
+            JornadaLaboralValidator.validateConceptoLaboralExistence(1L, conceptoLaboralRepositoryMock);
         });
         assertEquals("No existe el concepto ingresado.", exception.getMessage());
     }

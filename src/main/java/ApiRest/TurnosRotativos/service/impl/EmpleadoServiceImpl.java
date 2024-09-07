@@ -27,7 +27,7 @@ public class EmpleadoServiceImpl implements EmpleadoService {
     JornadaLaboralRepository jornadaRepo;
 
     @Override
-    public EmpleadoDTO getEmpleado(int id) {
+    public EmpleadoDTO getEmpleado(Long id) {
         Optional<Empleado> empleado = this.repository.findById(id);
         if (empleado.isPresent()) {
             return EmpleadoMapper.toDTO(empleado.get());
@@ -59,7 +59,7 @@ public class EmpleadoServiceImpl implements EmpleadoService {
 
     @Override
     @Transactional
-    public EmpleadoDTO updateEmpleado(int id, EmpleadoDTO empleadoDTO) {
+    public EmpleadoDTO updateEmpleado(Long id, EmpleadoDTO empleadoDTO) {
         Empleado existingEmpleado = repository.findById(id)
                 .orElseThrow(() -> new BusinessException("No se encontró el empleado con Id: " + id, HttpStatus.NOT_FOUND));
 
@@ -82,7 +82,7 @@ public class EmpleadoServiceImpl implements EmpleadoService {
 
     @Override
     @Transactional
-    public void deleteEmpleado(Integer id) {
+    public void deleteEmpleado(Long id) {
         Empleado empleado = repository.findById(id)
                 .orElseThrow(() -> new BusinessException("No se encontró el empleado con Id: " + id, HttpStatus.NOT_FOUND));
 

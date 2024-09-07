@@ -8,7 +8,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -27,9 +26,11 @@ public class JornadaLaboralController {
         List<JornadaLaboralDTO> jornadas = jornadaLaboralService.getJornadas(fechaDesde, fechaHasta, nroDocumento);
         return ResponseEntity.ok(jornadas);
     }
+
     @PostMapping
     public ResponseEntity<JornadaLaboralDTO> createJornada(@Valid @RequestBody JornadaLaboralDTO jornadaDTO) {
         JornadaLaboralDTO jornada = this.jornadaLaboralService.createJornadaLaboral(jornadaDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(jornada);
     }
+
 }

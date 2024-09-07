@@ -20,7 +20,7 @@ public class ConceptoLaboralController {
 
     @GetMapping
     public ResponseEntity<List<ConceptoLaboralDTO>> getConceptosLaborales(
-            @RequestParam(required = false) Integer id,
+            @RequestParam(required = false) Long id,
             @RequestParam(required = false) String nombre) {
 
         List<ConceptoLaboralDTO> conceptosLaborales = this.conceptoLaboralService.getConceptosLaborales(id, nombre);
